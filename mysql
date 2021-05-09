@@ -1,1 +1,73 @@
 
+var mysql = require("mysql2");
+// var db = require("../database");
+
+// var connection = mysql.createConnection({
+//     connectionLimit: 10,
+//     host: 'localhost',
+//     user: 'xxxxx',
+//     password: 'xxxxxx',
+//     database: 'xxxxxx',
+//     // debug: true
+// });
+
+// connection.connect(function(err) {
+//     if (err) {
+//         console.log("database Not Connected!");
+//     } else {
+//         console.log("database Connected!");
+//     }
+
+// });
+
+
+
+// const query = async(quertText, table, params) => {
+//     var dbQuery = mysql.format(quertText, table);
+//     return new Promise((resolve, reject) => {
+
+//         var last = connection.query(dbQuery, params, function(err, rows) {
+//             if (err) {
+//                 reject(err);
+//             } else {
+//                 resolve(rows);
+//             }
+//         });
+
+//         console.log('last.sql', last);
+//     });
+// }
+
+
+// module.exports = {
+//     query
+// }
+
+const pool = mysql.createPool({
+    host: 'localhost',
+    user: 'xxxx',
+    password: 'xxxx',
+    database: 'xxxxxx',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+const query = async(quertText, table, params) => {
+    var dbQuery = mysql.format(quertText, table);
+    return new Promise((resolve, reject) => {
+        var last = pool.query(dbQuery, params, function(err, rows) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+        // console.log('last.sql', last);
+    });
+}
+
+
+module.exports = {
+    query
+}
